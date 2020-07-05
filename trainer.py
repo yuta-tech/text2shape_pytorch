@@ -187,6 +187,6 @@ class Trainer():
                 # generated shape save
                 if step % (self.save_voxel_step*self.dstep) == 0:
 #                     print(fake_voxel.size())
-                    self.save_voxel(fake_voxel, true_voxel, step)
+                    self.save_voxel(fake_voxel, true_voxel, step//self.dstep)
                 
                 step = step + 1
