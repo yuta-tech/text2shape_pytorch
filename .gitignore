@@ -1,0 +1,6 @@
+*.txt
+*.ipynb
+
+__pycache__/
+scripts/log/
+scripts/runs/
