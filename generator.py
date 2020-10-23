@@ -5,9 +5,8 @@ import torch.nn.functional as F
 import torch.nn.parallel
 from torch.autograd import Variable
 
-from .layers import ConditionalBatchNorm3d, SNConv3d, SNConvTranspose3d, SNLinear
 
-from .config import cfg
+from utils.config import cfg
 
 class T2SWGenerator(nn.Module):
     def __init__(self, emb_noise_size=128+8):
@@ -15,7 +14,7 @@ class T2SWGenerator(nn.Module):
         self.emb_noise_size = emb_noise_size
 
         #model definition 
-        self.dense_in = SNLinear(self.emb_noise_size, 512*4*4*4)
+        self.dense_in = nn.Linear(self.emb_noise_size, 512*4*4*4)
         self.bn1 = nn.BatchNorm1d(512*4*4*4)
         # padding must be 1 !
         self.deconv1 = nn.ConvTranspose3d(512, 512, kernel_size=3, stride=1, padding=1)

@@ -5,6 +5,10 @@ cfg = __C
 
 __C.CUDA = True
 
+__C.DIR = edict()
+__C.DIR.DATA_PATH = '/home/fukatsu/dataset/text2shape-data/'
+__C.DIR.RGB_VOXEL_PATH = '/home/fukatsu/dataset/shapenet/voxel/reso32/'
+
 # Train const
 __C.TRAIN = edict()
 __C.TRAIN.BATCH_SIZE = 8

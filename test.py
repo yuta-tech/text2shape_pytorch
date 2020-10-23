@@ -3,7 +3,7 @@ from torch.utils.data import DataLoader
 from models.generator import T2SWGenerator
 import utils.dataset as dataset
 import numpy as np
-from models.config import cfg
+from utils.config import cfg
 
 
 # set random seed, default is 0
@@ -15,8 +15,8 @@ torch.manual_seed(seed)
 torch.cuda.manual_seed(seed)
 np.random.seed(seed)
 
-ckpt_dir = '/home/fukatsu/text2shape_pytorch/scripts/log/6_30_19_24_4/checkpoints/'
-test_dir = '/home/fukatsu/text2shape_pytorch/scripts/log/6_30_19_24_4/test/'
+ckpt_dir = 'scripts/log/6_30_19_24_4/checkpoints/'
+test_dir = 'scripts/log/6_30_19_24_4/test/'
 checkpoint = torch.load(ckpt_dir+'e59_s55000_d-32.835147857666016_g0.9256608486175537.pth')
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")

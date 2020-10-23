@@ -3,9 +3,9 @@ from torch.utils.data import DataLoader
 import numpy as np
 import argparse
 
-import utils.dataset as dataset
+import dataset as dataset
 
-from models.config import cfg, cfg_from_list
+from utils.config import cfg, cfg_from_list
 
 from trainer import Trainer
 

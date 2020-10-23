@@ -2,8 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from .config import cfg
-from .layers import ConditionalBatchNorm3d, SNConv3d, SNConvTranspose3d, SNLinear
+from utils.config import cfg
 
 
 

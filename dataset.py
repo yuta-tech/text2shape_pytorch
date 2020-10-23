@@ -7,7 +7,7 @@ import pickle
 import random
 import copy
 import math
-# from ..models.config import cfg
+from utils.config import cfg
 
 from sklearn.model_selection import train_test_split
 
@@ -82,7 +82,7 @@ def augment_voxel(voxel, max_noise=10):
     
 # not needed
 def _remove_bad_model(caption_tuples):
-    bad_models = open_pickle('/home/fukatsu/dataset/text2shape-data/shapenet/problematic_nrrds_shapenet_unverified_256_filtered_div_with_err_textures.p')
+    bad_models = open_pickle(cfg.DIR.DATA_PATH + 'shapenet/problematic_nrrds_shapenet_unverified_256_filtered_div_with_err_textures.p')
     
     # search bad models
     bad_idxs = []
@@ -96,8 +96,8 @@ def _remove_bad_model(caption_tuples):
     return caption_tuples
 
 def resplit_sample_train_val(train_split, val_split, seed):
-    train_embedding_pickle = '/home/fukatsu/dataset/text2shape-data/shapenet/shapenet-embeddings/text_embeddings_train.p'
-    val_embedding_pickle = '/home/fukatsu/dataset/text2shape-data/shapenet/shapenet-embeddings/text_embeddings_val.p'
+    train_embedding_pickle = cfg.DIR.DATA_PATH + 'shapenet/shapenet-embeddings/text_embeddings_train.p'
+    val_embedding_pickle = cfg.DIR.DATA_PATH + 'shapenet/shapenet-embeddings/text_embeddings_val.p'
     
     train_caption_tuples = open_pickle(train_embedding_pickle)['caption_embedding_tuples']
     val_caption_tuples = open_pickle(val_embedding_pickle)['caption_embedding_tuples']
@@ -108,13 +108,13 @@ def resplit_sample_train_val(train_split, val_split, seed):
     # resplit
     train_caption_tuples, val_caption_tuples = train_test_split(all_caption_tuples, test_size=val_split, shuffle=False)
     
-    save_pickle(train_caption_tuples, '/home/fukatsu/dataset/text2shape-data/shapenet/shapenet-embeddings/resplit_caption_tuples_train.p')
-    save_pickle(val_caption_tuples, '/home/fukatsu/dataset/text2shape-data/shapenet/shapenet-embeddings/resplit_caption_tuples_val.p')
+    save_pickle(train_caption_tuples, cfg.DIR.DATA_PATH + 'shapenet/shapenet-embeddings/resplit_caption_tuples_train.p')
+    save_pickle(val_caption_tuples, cfg.DIR.DATA_PATH + 'shapenet/shapenet-embeddings/resplit_caption_tuples_val.p')
 
 def resplit_sample(train_split, val_split, test_split, seed):
-    train_embedding_pickle = '/home/fukatsu/dataset/text2shape-data/shapenet/shapenet-embeddings/text_embeddings_train.p'
-    val_embedding_pickle = '/home/fukatsu/dataset/text2shape-data/shapenet/shapenet-embeddings/text_embeddings_val.p'
-    test_embedding_pickle = '/home/fukatsu/dataset/text2shape-data/shapenet/shapenet-embeddings/text_embeddings_test.p'
+    train_embedding_pickle = cfg.DIR.DATA_PATH + 'shapenet/shapenet-embeddings/text_embeddings_train.p'
+    val_embedding_pickle = cfg.DIR.DATA_PATH + 'shapenet/shapenet-embeddings/text_embeddings_val.p'
+    test_embedding_pickle = cfg.DIR.DATA_PATH + 'shapenet/shapenet-embeddings/text_embeddings_test.p'
     
     train_caption_tuples = open_pickle(train_embedding_pickle)['caption_embedding_tuples']
     val_caption_tuples = open_pickle(val_embedding_pickle)['caption_embedding_tuples']
@@ -127,9 +127,9 @@ def resplit_sample(train_split, val_split, test_split, seed):
     train_caption_tuples, test_caption_tuples = train_test_split(all_caption_tuples, test_size=test_split, shuffle=False)
     train_caption_tuples, val_caption_tuples = train_test_split(train_caption_tuples, test_size=val_split/(train_split+val_split), shuffle=False)
     
-    save_pickle(train_caption_tuples, '/home/fukatsu/dataset/text2shape-data/shapenet/shapenet-embeddings/resplit_caption_tuples_train.p')
-    save_pickle(val_caption_tuples, '/home/fukatsu/dataset/text2shape-data/shapenet/shapenet-embeddings/resplit_caption_tuples_val.p')
-    save_pickle(test_caption_tuples, '/home/fukatsu/dataset/text2shape-data/shapenet/shapenet-embeddings/resplit_caption_tuples_test.p')
+    save_pickle(train_caption_tuples, cfg.DIR.DATA_PATH + 'shapenet/shapenet-embeddings/resplit_caption_tuples_train.p')
+    save_pickle(val_caption_tuples, cfg.DIR.DATA_PATH + 'shapenet/shapenet-embeddings/resplit_caption_tuples_val.p')
+    save_pickle(test_caption_tuples, cfg.DIR.DATA_PATH + 'shapenet/shapenet-embeddings/resplit_caption_tuples_test.p')
 
 class ShapeNetDataset(Dataset):
     def __init__(self, mode, resplit=False):
@@ -137,22 +137,22 @@ class ShapeNetDataset(Dataset):
         assert mode in ['train', 'val', 'test']
         
         if not resplit:
-            self.embedding_pickle = f'/home/fukatsu/dataset/text2shape-data/shapenet/shapenet-embeddings/text_embeddings_{mode}.p'
+            self.embedding_pickle = cfg.DIR.DATA_PATH + f'shapenet/shapenet-embeddings/text_embeddings_{mode}.p'
             # embedding_text and model tuple
             self.caption_tuples = open_pickle(self.embedding_pickle)['caption_embedding_tuples']
             # index list for mismatch text extracting
             self.index_list = [x for x in range(len(self.caption_tuples))]
         else:
             if mode in ['train', 'val']:
-                resplit_pickle = f'/home/fukatsu/dataset/text2shape-data/shapenet/shapenet-embeddings/resplit_caption_tuples_{mode}.p'
+                resplit_pickle = cfg.DIR.DATA_PATH + f'shapenet/shapenet-embeddings/resplit_caption_tuples_{mode}.p'
                 self.caption_tuples = open_pickle(resplit_pickle)
             else:
-                self.embedding_pickle = f'/home/fukatsu/dataset/text2shape-data/shapenet/shapenet-embeddings/text_embeddings_{mode}.p'
+                self.embedding_pickle = cfg.DIR.DATA_PATH + f'shapenet/shapenet-embeddings/text_embeddings_{mode}.p'
                 # embedding_text and model tuple
                 self.caption_tuples = open_pickle(self.embedding_pickle)['caption_embedding_tuples']
             # index list for mismatch text extracting
             self.index_list = [x for x in range(len(self.caption_tuples))]
-        self.shapenet_dir = '/home/fukatsu/dataset/shapenet/voxel/reso32/nrrd_256_filter_div_32_solid'
+        self.shapenet_dir = cfg.DIR.RGB_VOXEL_PATH + 'nrrd_256_filter_div_32_solid'
         
         self.fake_index = np.random.permutation(self.index_list)
         self.mis_real_index = np.random.permutation(self.index_list)
@@ -232,14 +232,14 @@ class TestShapeNetDataset(Dataset):
     def __init__(self, resplit=False):
         super().__init__()
 
-        self.embedding_pickle = f'/home/fukatsu/dataset/text2shape-data/shapenet/shapenet-embeddings/text_embeddings_test.p'
+        self.embedding_pickle = cfg.DIR.DATA_PATH + f'shapenet/shapenet-embeddings/text_embeddings_test.p'
         # embedding_text and model tuple
         self.caption_tuples = open_pickle(self.embedding_pickle)['caption_embedding_tuples']
         # index list for mismatch text extracting
         self.index_list = [x for x in range(len(self.caption_tuples))]
         
 
-        self.shapenet_dir = '/home/fukatsu/dataset/shapenet/voxel/reso32/nrrd_256_filter_div_32_solid'
+        self.shapenet_dir = cfg.DIR.RGB_VOXEL_PATH + 'reso32/nrrd_256_filter_div_32_solid'
 
             
 

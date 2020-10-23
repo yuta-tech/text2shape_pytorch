@@ -6,12 +6,12 @@ from torch.autograd import Variable
 
 from torchsummary import summary
 
-from models.discriminator import T2SWDiscriminator
-from models.generator import T2SWGenerator, T2SWGenerator2
-from models.config import cfg
+from discriminator import T2SWDiscriminator
+from generator import T2SWGenerator, T2SWGenerator2
+from utils.config import cfg
 
 import utils.losses as losses
-import utils.dataset as dataset
+import dataset as dataset
 
 from utils.util_fnc import weights_init
 

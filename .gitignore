@@ -1,6 +1,9 @@
 *.txt
 *.ipynb
 
+sn_train.py
+layers.py
+
 __pycache__/
 scripts/log/
 scripts/runs/
